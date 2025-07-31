@@ -105,7 +105,7 @@ export function ComparativeAnalysis() {
     setItemsPerPage: setComparisonItemsPerPage
   } = usePagination({
     data: comparisonData,
-    itemsPerPage: 3
+    itemsPerPage: 1
   });
 
   // Pagination pour les données de tendances
@@ -119,7 +119,7 @@ export function ComparativeAnalysis() {
     setItemsPerPage: setTrendItemsPerPage
   } = usePagination({
     data: trendData,
-    itemsPerPage: 4
+    itemsPerPage: 2
   });
 
   // Pagination pour les données de départements
@@ -133,7 +133,7 @@ export function ComparativeAnalysis() {
     setItemsPerPage: setDepartmentItemsPerPage
   } = usePagination({
     data: departmentData,
-    itemsPerPage: 4
+    itemsPerPage: 2
   });
 
   const handleMetricChange = (metric: string, checked: boolean) => {
