@@ -78,6 +78,79 @@ export function DocumentUsageMetrics() {
       changePercent: 22,
       lastAccessed: "Il y a 6 heures",
       category: "Droit environnemental"
+    },
+    // Données d'exemple supplémentaires pour forcer la pagination
+    {
+      id: 5,
+      title: "Code civil - Articles 544-577",
+      type: "Texte juridique",
+      views: 678,
+      downloads: 45,
+      shares: 15,
+      trend: "up",
+      changePercent: 18,
+      lastAccessed: "Il y a 8 heures",
+      category: "Droit civil"
+    },
+    {
+      id: 6,
+      title: "Loi sur la protection des données",
+      type: "Loi",
+      views: 612,
+      downloads: 78,
+      shares: 19,
+      trend: "up",
+      changePercent: 28,
+      lastAccessed: "Il y a 10 heures",
+      category: "Droit numérique"
+    },
+    {
+      id: 7,
+      title: "Décret sur les marchés publics",
+      type: "Décret",
+      views: 589,
+      downloads: 56,
+      shares: 11,
+      trend: "down",
+      changePercent: -5,
+      lastAccessed: "Il y a 12 heures",
+      category: "Droit administratif"
+    },
+    {
+      id: 8,
+      title: "Arrêté sur la sécurité routière",
+      type: "Arrêté",
+      views: 534,
+      downloads: 42,
+      shares: 9,
+      trend: "up",
+      changePercent: 12,
+      lastAccessed: "Il y a 14 heures",
+      category: "Droit routier"
+    },
+    {
+      id: 9,
+      title: "Code de procédure pénale",
+      type: "Code",
+      views: 498,
+      downloads: 67,
+      shares: 14,
+      trend: "up",
+      changePercent: 9,
+      lastAccessed: "Il y a 16 heures",
+      category: "Droit pénal"
+    },
+    {
+      id: 10,
+      title: "Loi sur l'urbanisme",
+      type: "Loi",
+      views: 456,
+      downloads: 38,
+      shares: 7,
+      trend: "down",
+      changePercent: -3,
+      lastAccessed: "Il y a 18 heures",
+      category: "Droit de l'urbanisme"
     }
   ];
 
@@ -126,7 +199,7 @@ export function DocumentUsageMetrics() {
     setItemsPerPage: setRecentActivityItemsPerPage
   } = usePagination({
     data: topDocuments,
-    itemsPerPage: 5
+    itemsPerPage: 2
   });
 
   // Pagination pour les Top Documents
@@ -140,7 +213,7 @@ export function DocumentUsageMetrics() {
     setItemsPerPage: setTopDocumentsItemsPerPage
   } = usePagination({
     data: topDocuments,
-    itemsPerPage: 3
+    itemsPerPage: 2
   });
 
   return (

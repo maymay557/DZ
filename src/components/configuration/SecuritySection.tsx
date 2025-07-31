@@ -111,6 +111,52 @@ export function SecuritySection({ language = "fr" }: SecuritySectionProps) {
       time: "2025-01-01 10:20", 
       status: "Quarantaine",
       attempts: 15
+    },
+    // Données d'exemple supplémentaires pour forcer la pagination
+    { 
+      type: "Attaque DDoS", 
+      severity: "Critique", 
+      source: "Botnet", 
+      target: "Serveur Principal", 
+      time: "2025-01-01 08:15", 
+      status: "Mitigé",
+      attempts: 1500
+    },
+    { 
+      type: "Tentative de Brute Force", 
+      severity: "Élevé", 
+      source: "192.168.1.200", 
+      target: "Compte Admin", 
+      time: "2024-12-31 23:45", 
+      status: "Bloqué",
+      attempts: 45
+    },
+    { 
+      type: "Vulnérabilité Zero-Day", 
+      severity: "Critique", 
+      source: "Scanner Automatique", 
+      target: "Application Web", 
+      time: "2024-12-31 20:30", 
+      status: "Patché",
+      attempts: 1
+    },
+    { 
+      type: "Tentative d'Élévation de Privilèges", 
+      severity: "Élevé", 
+      source: "Utilisateur Interne", 
+      target: "Système Admin", 
+      time: "2024-12-31 18:20", 
+      status: "Refusé",
+      attempts: 7
+    },
+    { 
+      type: "Exfiltration de Données", 
+      severity: "Critique", 
+      source: "Compte Compromis", 
+      target: "Base de Données", 
+      time: "2024-12-31 15:10", 
+      status: "Détecté",
+      attempts: 3
     }
   ].filter(threat => 
     threat.type.toLowerCase().includes(threatsFilter.toLowerCase()) ||
@@ -125,7 +171,14 @@ export function SecuritySection({ language = "fr" }: SecuritySectionProps) {
     { time: "2025-01-02 13:20", user: "A.Benali", action: "Consultation Document Confidentiel", resource: "Document #1234", result: "Succès" },
     { time: "2025-01-02 11:15", user: "Système", action: "Détection Injection SQL", resource: "Base de Données", result: "Bloqué" },
     { time: "2025-01-02 09:30", user: "Inconnu", action: "Tentative Accès Non Autorisé", resource: "Admin Panel", result: "Échec" },
-    { time: "2025-01-01 16:45", user: "Système", action: "Suppression Malware", resource: "Poste #15", result: "Succès" }
+    { time: "2025-01-01 16:45", user: "Système", action: "Suppression Malware", resource: "Poste #15", result: "Succès" },
+    // Données d'exemple supplémentaires pour forcer la pagination
+    { time: "2025-01-01 14:20", user: "M.Karim", action: "Export Données Sensibles", resource: "Base RH", result: "Succès" },
+    { time: "2025-01-01 12:15", user: "Système", action: "Mise à Jour Antivirus", resource: "Tous Postes", result: "Succès" },
+    { time: "2025-01-01 10:30", user: "Admin", action: "Création Nouveau Utilisateur", resource: "Système", result: "Succès" },
+    { time: "2024-12-31 23:45", user: "Système", action: "Sauvegarde Automatique", resource: "Serveur Principal", result: "Succès" },
+    { time: "2024-12-31 21:20", user: "L.Bouazza", action: "Modification Document", resource: "Politique RGPD", result: "Succès" },
+    { time: "2024-12-31 19:15", user: "Système", action: "Scan Sécurité", resource: "Réseau", result: "Terminé" }
   ];
 
   const getSeverityColor = (severity: string) => {

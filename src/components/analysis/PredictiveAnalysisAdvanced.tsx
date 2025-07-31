@@ -176,6 +176,55 @@ export function PredictiveAnalysisAdvanced() {
       impact: "Moyen",
       description: "Modernisation du droit des contrats",
       status: "En hausse"
+    },
+    // Données d'exemple supplémentaires pour forcer la pagination
+    {
+      id: 9,
+      title: "Protection des données",
+      category: "Droit numérique",
+      currentTrend: "+45%",
+      predictedTrend: "+62%",
+      confidence: 89,
+      timeframe: "10 mois",
+      impact: "Élevé",
+      description: "Nouvelles réglementations RGPD et protection vie privée",
+      status: "En hausse"
+    },
+    {
+      id: 10,
+      title: "Droit de la santé",
+      category: "Droit médical",
+      currentTrend: "+32%",
+      predictedTrend: "+48%",
+      confidence: 84,
+      timeframe: "14 mois",
+      impact: "Moyen",
+      description: "Évolution des normes sanitaires et médicales",
+      status: "En hausse"
+    },
+    {
+      id: 11,
+      title: "Droit de l'éducation",
+      category: "Droit administratif",
+      currentTrend: "+15%",
+      predictedTrend: "+28%",
+      confidence: 78,
+      timeframe: "16 mois",
+      impact: "Faible",
+      description: "Modernisation du système éducatif",
+      status: "En hausse"
+    },
+    {
+      id: 12,
+      title: "Droit des transports",
+      category: "Droit routier",
+      currentTrend: "+22%",
+      predictedTrend: "+35%",
+      confidence: 81,
+      timeframe: "7 mois",
+      impact: "Moyen",
+      description: "Nouvelles réglementations de sécurité routière",
+      status: "En hausse"
     }
   ];
 
