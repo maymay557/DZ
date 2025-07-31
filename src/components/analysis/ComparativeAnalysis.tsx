@@ -23,7 +23,16 @@ const comparisonData = [
   { metric: 'Volume de documents', periode1: 1200, periode2: 1450, difference: 21 },
   { metric: 'Fréquence d\'accès', periode1: 65, periode2: 72, difference: 7 },
   { metric: 'Précision', periode1: 92, periode2: 95, difference: 3 },
-  { metric: 'Réactivité', periode1: 80, periode2: 87, difference: 7 }
+  { metric: 'Réactivité', periode1: 80, periode2: 87, difference: 7 },
+  // Données d'exemple supplémentaires pour forcer la pagination
+  { metric: 'Sécurité', periode1: 88, periode2: 94, difference: 6 },
+  { metric: 'Accessibilité', periode1: 82, periode2: 89, difference: 7 },
+  { metric: 'Innovation', periode1: 75, periode2: 83, difference: 8 },
+  { metric: 'Durabilité', periode1: 90, periode2: 96, difference: 6 },
+  { metric: 'Transparence', periode1: 85, periode2: 91, difference: 6 },
+  { metric: 'Collaboration', periode1: 78, periode2: 86, difference: 8 },
+  { metric: 'Adaptabilité', periode1: 83, periode2: 90, difference: 7 },
+  { metric: 'Résilience', periode1: 87, periode2: 93, difference: 6 }
 ];
 
 const trendData = [

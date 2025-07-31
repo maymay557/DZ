@@ -45,7 +45,12 @@ const mockFeedbackData = {
     comments: [
       { id: 1, rating: 2, comment: "Trop de documents demandés, processus très long", category: "documents", date: "2024-01-15" },
       { id: 2, rating: 4, comment: "Personnel accueillant mais délais trop longs", category: "délais", date: "2024-01-12" },
-      { id: 3, rating: 5, comment: "Excellente digitalisation du processus", category: "digitalisation", date: "2024-01-10" }
+      { id: 3, rating: 5, comment: "Excellente digitalisation du processus", category: "digitalisation", date: "2024-01-10" },
+      { id: 4, rating: 3, comment: "Processus amélioré mais encore des lenteurs", category: "performance", date: "2024-01-08" },
+      { id: 5, rating: 4, comment: "Interface utilisateur intuitive et claire", category: "interface", date: "2024-01-06" },
+      { id: 6, rating: 2, comment: "Manque d'informations sur les délais", category: "information", date: "2024-01-04" },
+      { id: 7, rating: 5, comment: "Service client très réactif et professionnel", category: "service", date: "2024-01-02" },
+      { id: 8, rating: 3, comment: "Procédure acceptable mais pourrait être simplifiée", category: "simplification", date: "2023-12-30" }
     ],
     commonIssues: [
       { issue: "Délais trop longs", count: 67, percentage: 43 },
@@ -59,7 +64,12 @@ const mockFeedbackData = {
     comments: [
       { id: 1, rating: 5, comment: "Processus rapide et efficace", category: "efficacité", date: "2024-01-16" },
       { id: 2, rating: 4, comment: "Bon service mais attente longue", category: "attente", date: "2024-01-14" },
-      { id: 3, rating: 3, comment: "Procédure claire mais coûteuse", category: "coût", date: "2024-01-11" }
+      { id: 3, rating: 3, comment: "Procédure claire mais coûteuse", category: "coût", date: "2024-01-11" },
+      { id: 4, rating: 5, comment: "Excellent accueil et accompagnement", category: "accueil", date: "2024-01-09" },
+      { id: 5, rating: 4, comment: "Documentation claire et complète", category: "documentation", date: "2024-01-07" },
+      { id: 6, rating: 2, comment: "Délais de traitement trop longs", category: "délais", date: "2024-01-05" },
+      { id: 7, rating: 5, comment: "Personnel compétent et disponible", category: "personnel", date: "2024-01-03" },
+      { id: 8, rating: 3, comment: "Procédure standard mais efficace", category: "procédure", date: "2023-12-31" }
     ],
     commonIssues: [
       { issue: "Files d'attente", count: 89, percentage: 21 },
@@ -73,7 +83,12 @@ const mockFeedbackData = {
     comments: [
       { id: 1, rating: 1, comment: "Processus extrêmement complexe et long", category: "complexité", date: "2024-01-13" },
       { id: 2, rating: 2, comment: "Manque de coordination entre services", category: "coordination", date: "2024-01-09" },
-      { id: 3, rating: 3, comment: "Amélioration nécessaire de la communication", category: "communication", date: "2024-01-08" }
+      { id: 3, rating: 3, comment: "Amélioration nécessaire de la communication", category: "communication", date: "2024-01-08" },
+      { id: 4, rating: 2, comment: "Délais d'attente excessifs", category: "délais", date: "2024-01-06" },
+      { id: 5, rating: 1, comment: "Procédure trop bureaucratique", category: "bureaucratie", date: "2024-01-04" },
+      { id: 6, rating: 3, comment: "Manque de transparence dans les décisions", category: "transparence", date: "2024-01-02" },
+      { id: 7, rating: 2, comment: "Coordination défaillante entre administrations", category: "coordination", date: "2023-12-30" },
+      { id: 8, rating: 1, comment: "Processus inadapté aux besoins réels", category: "adaptation", date: "2023-12-28" }
     ],
     commonIssues: [
       { issue: "Processus trop complexe", count: 45, percentage: 51 },

@@ -21,6 +21,76 @@ interface OverviewTabProps {
 }
 
 export function OverviewTab({ procedures }: OverviewTabProps) {
+  // Données d'exemple pour forcer la pagination
+  const exampleProcedures = [
+    ...procedures,
+    {
+      id: "ex1",
+      name: "Création d'entreprise SARL - Exemple 1",
+      averageTime: 25,
+      documents: 8,
+      administrations: 3,
+      cost: 150000,
+      complexityScore: 75,
+      successRate: 85,
+      userSatisfaction: 4.2,
+      feedbackCount: 45,
+      trends: { timeChange: 5, satisfactionChange: 8 }
+    },
+    {
+      id: "ex2", 
+      name: "Demande de passeport - Exemple 2",
+      averageTime: 15,
+      documents: 5,
+      administrations: 2,
+      cost: 80000,
+      complexityScore: 60,
+      successRate: 92,
+      userSatisfaction: 4.5,
+      feedbackCount: 78,
+      trends: { timeChange: -3, satisfactionChange: 12 }
+    },
+    {
+      id: "ex3",
+      name: "Permis de construire - Exemple 3", 
+      averageTime: 45,
+      documents: 12,
+      administrations: 4,
+      cost: 250000,
+      complexityScore: 90,
+      successRate: 68,
+      userSatisfaction: 2.8,
+      feedbackCount: 23,
+      trends: { timeChange: 15, satisfactionChange: -5 }
+    },
+    {
+      id: "ex4",
+      name: "Licence commerciale - Exemple 4",
+      averageTime: 30,
+      documents: 10,
+      administrations: 3,
+      cost: 180000,
+      complexityScore: 70,
+      successRate: 78,
+      userSatisfaction: 3.9,
+      feedbackCount: 34,
+      trends: { timeChange: 8, satisfactionChange: 6 }
+    },
+    {
+      id: "ex5",
+      name: "Certificat de conformité - Exemple 5",
+      averageTime: 20,
+      documents: 6,
+      administrations: 2,
+      cost: 95000,
+      complexityScore: 55,
+      successRate: 88,
+      userSatisfaction: 4.1,
+      feedbackCount: 56,
+      trends: { timeChange: -2, satisfactionChange: 9 }
+    }
+  ];
+
   // Pagination pour les procédures
   const {
     currentData: paginatedProcedures,
@@ -31,8 +101,8 @@ export function OverviewTab({ procedures }: OverviewTabProps) {
     setCurrentPage,
     setItemsPerPage
   } = usePagination({
-    data: procedures,
-    itemsPerPage: 1
+    data: exampleProcedures,
+    itemsPerPage: 2
   });
 
   return (
