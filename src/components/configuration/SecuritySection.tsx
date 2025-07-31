@@ -175,6 +175,20 @@ export function SecuritySection({ language = "fr" }: SecuritySectionProps) {
     itemsPerPage: 10
   });
 
+  // Pagination pour les politiques de sécurité
+  const {
+    currentData: paginatedSecurityPolicies,
+    currentPage: securityPoliciesCurrentPage,
+    totalPages: securityPoliciesTotalPages,
+    itemsPerPage: securityPoliciesItemsPerPage,
+    totalItems: securityPoliciesTotalItems,
+    setCurrentPage: setSecurityPoliciesCurrentPage,
+    setItemsPerPage: setSecurityPoliciesItemsPerPage
+  } = usePagination({
+    data: securityPolicies,
+    itemsPerPage: 4
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -268,7 +282,7 @@ export function SecuritySection({ language = "fr" }: SecuritySectionProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {securityPolicies.map((policy, index) => (
+            {paginatedSecurityPolicies.map((policy, index) => (
               <Card key={index}>
                 <CardContent className="pt-6">
                   <div className="flex items-start justify-between">
@@ -291,6 +305,20 @@ export function SecuritySection({ language = "fr" }: SecuritySectionProps) {
               </Card>
             ))}
           </div>
+          
+          {/* Pagination pour les politiques de sécurité */}
+          {securityPoliciesTotalPages > 1 && (
+            <div className="mt-6">
+              <Pagination
+                currentPage={securityPoliciesCurrentPage}
+                totalPages={securityPoliciesTotalPages}
+                totalItems={securityPoliciesTotalItems}
+                itemsPerPage={securityPoliciesItemsPerPage}
+                onPageChange={setSecurityPoliciesCurrentPage}
+                onItemsPerPageChange={setSecurityPoliciesItemsPerPage}
+              />
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="threats" className="space-y-4">

@@ -129,6 +129,20 @@ export function DocumentUsageMetrics() {
     itemsPerPage: 5
   });
 
+  // Pagination pour les Top Documents
+  const {
+    currentData: paginatedTopDocuments,
+    currentPage: topDocumentsCurrentPage,
+    totalPages: topDocumentsTotalPages,
+    itemsPerPage: topDocumentsItemsPerPage,
+    totalItems: topDocumentsTotalItems,
+    setCurrentPage: setTopDocumentsCurrentPage,
+    setItemsPerPage: setTopDocumentsItemsPerPage
+  } = usePagination({
+    data: topDocuments,
+    itemsPerPage: 3
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -253,7 +267,7 @@ export function DocumentUsageMetrics() {
           </div>
 
           <div className="space-y-4">
-            {topDocuments.map((doc) => (
+            {paginatedTopDocuments.map((doc) => (
               <Card key={doc.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
@@ -304,6 +318,20 @@ export function DocumentUsageMetrics() {
               </Card>
             ))}
           </div>
+          
+          {/* Pagination pour les Top Documents */}
+          {topDocumentsTotalPages > 1 && (
+            <div className="mt-6">
+              <Pagination
+                currentPage={topDocumentsCurrentPage}
+                totalPages={topDocumentsTotalPages}
+                totalItems={topDocumentsTotalItems}
+                itemsPerPage={topDocumentsItemsPerPage}
+                onPageChange={setTopDocumentsCurrentPage}
+                onItemsPerPageChange={setTopDocumentsItemsPerPage}
+              />
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="engagement" className="space-y-6">
