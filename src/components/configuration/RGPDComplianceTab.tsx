@@ -417,6 +417,76 @@ export function RGPDComplianceTab({ language = "fr" }: RGPDComplianceTabProps) {
     }
   ];
 
+  // Rapports de conformité
+  const complianceReports = [
+    {
+      id: "R001",
+      title: "Rapport Mensuel RGPD",
+      description: "Conformité générale - Janvier 2025",
+      score: 86,
+      status: "Terminé",
+      lastGenerated: "2025-01-22",
+      type: "Mensuel",
+      icon: FileCheck,
+      color: "text-green-600"
+    },
+    {
+      id: "R002",
+      title: "Audit Loi 18-07",
+      description: "Conformité Algérienne - Q4 2024",
+      score: 91,
+      status: "Terminé",
+      lastGenerated: "2025-01-15",
+      type: "Trimestriel",
+      icon: Lock,
+      color: "text-blue-600"
+    },
+    {
+      id: "R003",
+      title: "Rapport de Sécurité",
+      description: "Audit de sécurité des données - Décembre 2024",
+      score: 78,
+      status: "En cours",
+      lastGenerated: "2024-12-28",
+      type: "Sécurité",
+      icon: Shield,
+      color: "text-orange-600"
+    },
+    {
+      id: "R004",
+      title: "Évaluation des Risques",
+      description: "Analyse des risques RGPD - Q4 2024",
+      score: 82,
+      status: "Terminé",
+      lastGenerated: "2024-12-15",
+      type: "Risques",
+      icon: AlertTriangle,
+      color: "text-yellow-600"
+    },
+    {
+      id: "R005",
+      title: "Rapport de Formation",
+      description: "Évaluation des formations RGPD - 2024",
+      score: 65,
+      status: "À améliorer",
+      lastGenerated: "2024-12-10",
+      type: "Formation",
+      icon: Users,
+      color: "text-red-600"
+    },
+    {
+      id: "R006",
+      title: "Audit des Consentements",
+      description: "Vérification des consentements - Janvier 2025",
+      score: 88,
+      status: "Terminé",
+      lastGenerated: "2025-01-20",
+      type: "Consentements",
+      icon: CheckCircle,
+      color: "text-green-600"
+    }
+  ];
+
   // Pagination pour les consentements
   const {
     currentData: paginatedConsents,
@@ -471,6 +541,20 @@ export function RGPDComplianceTab({ language = "fr" }: RGPDComplianceTabProps) {
   } = usePagination({
     data: processingActivities,
     itemsPerPage: 5
+  });
+
+  // Pagination pour les rapports de conformité
+  const {
+    currentData: paginatedComplianceReports,
+    currentPage: complianceReportsCurrentPage,
+    totalPages: complianceReportsTotalPages,
+    itemsPerPage: complianceReportsItemsPerPage,
+    totalItems: complianceReportsTotalItems,
+    setCurrentPage: setComplianceReportsCurrentPage,
+    setItemsPerPage: setComplianceReportsItemsPerPage
+  } = usePagination({
+    data: complianceReports,
+    itemsPerPage: 3
   });
 
   const getStatusColor = (status: string) => {
@@ -787,56 +871,54 @@ export function RGPDComplianceTab({ language = "fr" }: RGPDComplianceTabProps) {
           <h3 className="text-lg font-semibold">Rapports de Conformité</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileCheck className="w-5 h-5 text-green-600" />
-                  Rapport Mensuel RGPD
-                </CardTitle>
-                <CardDescription>Conformité générale - Janvier 2025</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span>Score global</span>
-                    <span className="font-bold text-green-600">86%</span>
+            {paginatedComplianceReports.map((report) => (
+              <Card key={report.id}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <report.icon className={`w-5 h-5 ${report.color}`} />
+                    {report.title}
+                  </CardTitle>
+                  <CardDescription>{report.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>Score de conformité</span>
+                      <span className={`font-bold ${report.score >= 80 ? 'text-green-600' : report.score >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
+                        {report.score}%
+                      </span>
+                    </div>
+                    <Progress value={report.score} className="h-2" />
+                    <div className="flex justify-between items-center">
+                      <div className="text-sm text-gray-600">
+                        <div>Dernière génération: {report.lastGenerated}</div>
+                        <Badge className={getStatusColor(report.status)}>
+                          {report.status}
+                        </Badge>
+                      </div>
+                      <Button variant="outline" size="sm">
+                        <Download className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
-                  <Progress value={86} className="h-2" />
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>Dernière génération: 22/01/2025</span>
-                    <Button variant="outline" size="sm">
-                      <Download className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Lock className="w-5 h-5 text-blue-600" />
-                  Audit Loi 18-07
-                </CardTitle>
-                <CardDescription>Conformité Algérienne - Q4 2024</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span>Score de conformité</span>
-                    <span className="font-bold text-blue-600">91%</span>
-                  </div>
-                  <Progress value={91} className="h-2" />
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>Dernière génération: 15/01/2025</span>
-                    <Button variant="outline" size="sm">
-                      <Download className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ))}
           </div>
+          
+          {/* Pagination pour les rapports de conformité */}
+          {complianceReportsTotalPages > 1 && (
+            <div className="mt-6">
+              <Pagination
+                currentPage={complianceReportsCurrentPage}
+                totalPages={complianceReportsTotalPages}
+                totalItems={complianceReportsTotalItems}
+                itemsPerPage={complianceReportsItemsPerPage}
+                onPageChange={setComplianceReportsCurrentPage}
+                onItemsPerPageChange={setComplianceReportsItemsPerPage}
+              />
+            </div>
+          )}
 
           <Card>
             <CardHeader>
