@@ -1,9 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Input } from '@/components/ui/input';
+import { Pagination } from '@/components/common/Pagination';
+import { usePagination } from '@/hooks/usePagination';
 import { 
   Zap, 
   Clock, 
@@ -12,10 +15,16 @@ import {
   TrendingDown, 
   CheckCircle,
   AlertCircle,
-  Target
+  Target,
+  Search,
+  Filter
 } from 'lucide-react';
 
 export function ProcedureSimplificationSection() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+
   const simplificationOpportunities = [
     {
       id: 1,
@@ -46,6 +55,57 @@ export function ProcedureSimplificationSection() {
       potentialReduction: "33%",
       priority: "Faible",
       status: "Terminé"
+    },
+    // Données d'exemple supplémentaires pour forcer la pagination
+    {
+      id: 4,
+      procedure: "Création d'entreprise SARL",
+      complexity: "Élevée",
+      steps: 15,
+      proposedSteps: 9,
+      potentialReduction: "40%",
+      priority: "Haute",
+      status: "En cours"
+    },
+    {
+      id: 5,
+      procedure: "Licence commerciale",
+      complexity: "Moyenne",
+      steps: 10,
+      proposedSteps: 6,
+      potentialReduction: "40%",
+      priority: "Moyenne",
+      status: "Planifié"
+    },
+    {
+      id: 6,
+      procedure: "Certificat de conformité",
+      complexity: "Faible",
+      steps: 5,
+      proposedSteps: 3,
+      potentialReduction: "40%",
+      priority: "Faible",
+      status: "Terminé"
+    },
+    {
+      id: 7,
+      procedure: "Autorisation d'exploitation",
+      complexity: "Élevée",
+      steps: 18,
+      proposedSteps: 11,
+      potentialReduction: "39%",
+      priority: "Haute",
+      status: "En cours"
+    },
+    {
+      id: 8,
+      procedure: "Déclaration fiscale",
+      complexity: "Moyenne",
+      steps: 9,
+      proposedSteps: 5,
+      potentialReduction: "44%",
+      priority: "Moyenne",
+      status: "Planifié"
     }
   ];
 
@@ -73,6 +133,28 @@ export function ProcedureSimplificationSection() {
       default: return <Clock className="w-4 h-4 text-gray-600" />;
     }
   };
+
+  // Filtrage des opportunités de simplification
+  const filteredOpportunities = simplificationOpportunities.filter(opportunity => {
+    const matchesSearch = opportunity.procedure.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesPriority = priorityFilter === 'all' || opportunity.priority === priorityFilter;
+    const matchesStatus = statusFilter === 'all' || opportunity.status === statusFilter;
+    return matchesSearch && matchesPriority && matchesStatus;
+  });
+
+  // Pagination pour les opportunités de simplification
+  const {
+    currentData: paginatedOpportunities,
+    currentPage,
+    totalPages,
+    itemsPerPage,
+    totalItems,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredOpportunities,
+    itemsPerPage: 2
+  });
 
   return (
     <div className="space-y-6">
@@ -110,8 +192,47 @@ export function ProcedureSimplificationSection() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          {/* Filtres */}
+          <div className="mb-6 space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    placeholder="Rechercher une procédure..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <select
+                  value={priorityFilter}
+                  onChange={(e) => setPriorityFilter(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                >
+                  <option value="all">Toutes les priorités</option>
+                  <option value="Haute">Haute priorité</option>
+                  <option value="Moyenne">Moyenne priorité</option>
+                  <option value="Faible">Faible priorité</option>
+                </select>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                >
+                  <option value="all">Tous les statuts</option>
+                  <option value="Terminé">Terminé</option>
+                  <option value="En cours">En cours</option>
+                  <option value="Planifié">Planifié</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-4">
-            {simplificationOpportunities.map((opportunity) => (
+            {paginatedOpportunities.map((opportunity) => (
               <div key={opportunity.id} className="border rounded-lg p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
@@ -143,6 +264,20 @@ export function ProcedureSimplificationSection() {
               </div>
             ))}
           </div>
+
+          {/* Pagination */}
+          {filteredOpportunities.length > 0 && (
+            <div className="mt-6">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalItems={totalItems}
+                itemsPerPage={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onItemsPerPageChange={setItemsPerPage}
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
 

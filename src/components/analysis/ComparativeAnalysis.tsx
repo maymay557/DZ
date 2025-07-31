@@ -81,6 +81,22 @@ const timeSeriesData = [
   { date: '2024-06', docs: 289, users: 2380, queries: 6980 }
 ];
 
+// Données des procédures à comparer
+const proceduresToCompare = [
+  { id: 1, name: "Demande de permis de construire", category: "Urbanisme", complexity: "Élevée", duration: "45 jours", status: "Active" },
+  { id: 2, name: "Inscription au registre du commerce", category: "Commerce", complexity: "Moyenne", duration: "30 jours", status: "Active" },
+  { id: 3, name: "Demande de passeport", category: "Identité", complexity: "Faible", duration: "15 jours", status: "Active" },
+  { id: 4, name: "Création d'entreprise SARL", category: "Commerce", complexity: "Élevée", duration: "60 jours", status: "Active" },
+  { id: 5, name: "Licence commerciale", category: "Commerce", complexity: "Moyenne", duration: "25 jours", status: "Active" },
+  { id: 6, name: "Certificat de conformité", category: "Sécurité", complexity: "Faible", duration: "10 jours", status: "Active" },
+  { id: 7, name: "Autorisation d'exploitation", category: "Industrie", complexity: "Élevée", duration: "90 jours", status: "Active" },
+  { id: 8, name: "Déclaration fiscale", category: "Fiscalité", complexity: "Moyenne", duration: "20 jours", status: "Active" },
+  { id: 9, name: "Demande de subvention", category: "Financement", complexity: "Élevée", duration: "75 jours", status: "Active" },
+  { id: 10, name: "Certificat de résidence", category: "Administration", complexity: "Faible", duration: "12 jours", status: "Active" },
+  { id: 11, name: "Permis de conduire", category: "Transport", complexity: "Moyenne", duration: "35 jours", status: "Active" },
+  { id: 12, name: "Licence d'importation", category: "Commerce", complexity: "Élevée", duration: "50 jours", status: "Active" }
+];
+
 export function ComparativeAnalysis() {
   const [period1, setPeriod1] = useState('q1-2024');
   const [period2, setPeriod2] = useState('q4-2024');
@@ -90,6 +106,8 @@ export function ComparativeAnalysis() {
   const [dateRange, setDateRange] = useState({ start: '2024-01', end: '2024-06' });
   const [filterDepartment, setFilterDepartment] = useState('all');
   const [filterDocType, setFilterDocType] = useState('all');
+  const [procedureSearchTerm, setProcedureSearchTerm] = useState('');
+  const [procedureCategoryFilter, setProcedureCategoryFilter] = useState('all');
   const [selectedMetrics, setSelectedMetrics] = useState({
     Performance: true,
     Utilisation: true,
@@ -158,6 +176,27 @@ export function ComparativeAnalysis() {
       console.log('Analyse comparative terminée');
     }, 2000);
   };
+
+  // Filtrage des procédures à comparer
+  const filteredProcedures = proceduresToCompare.filter(procedure => {
+    const matchesSearch = procedure.name.toLowerCase().includes(procedureSearchTerm.toLowerCase());
+    const matchesCategory = procedureCategoryFilter === 'all' || procedure.category === procedureCategoryFilter;
+    return matchesSearch && matchesCategory;
+  });
+
+  // Pagination pour les procédures à comparer
+  const {
+    currentData: paginatedProcedures,
+    currentPage: proceduresCurrentPage,
+    totalPages: proceduresTotalPages,
+    itemsPerPage: proceduresItemsPerPage,
+    totalItems: proceduresTotalItems,
+    setCurrentPage: setProceduresCurrentPage,
+    setItemsPerPage: setProceduresItemsPerPage
+  } = usePagination({
+    data: filteredProcedures,
+    itemsPerPage: 3
+  });
 
   return (
     <div className="space-y-6">
@@ -309,6 +348,87 @@ export function ComparativeAnalysis() {
               Exporter les résultats
             </Button>
           </div>
+
+          {/* Sélection des procédures à comparer */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Sélectionner les Procédures à Comparer</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {/* Filtres pour les procédures */}
+              <div className="mb-6 space-y-4">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                      <Input
+                        placeholder="Rechercher une procédure..."
+                        value={procedureSearchTerm}
+                        onChange={(e) => setProcedureSearchTerm(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <select
+                      value={procedureCategoryFilter}
+                      onChange={(e) => setProcedureCategoryFilter(e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                    >
+                      <option value="all">Toutes les catégories</option>
+                      <option value="Urbanisme">Urbanisme</option>
+                      <option value="Commerce">Commerce</option>
+                      <option value="Identité">Identité</option>
+                      <option value="Sécurité">Sécurité</option>
+                      <option value="Industrie">Industrie</option>
+                      <option value="Fiscalité">Fiscalité</option>
+                      <option value="Financement">Financement</option>
+                      <option value="Administration">Administration</option>
+                      <option value="Transport">Transport</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Liste des procédures avec pagination */}
+              <div className="space-y-4">
+                {paginatedProcedures.map((procedure) => (
+                  <div key={procedure.id} className="border rounded-lg p-4 hover:bg-gray-50">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <h4 className="font-medium text-gray-900">{procedure.name}</h4>
+                        <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
+                          <span>Catégorie: {procedure.category}</span>
+                          <span>Complexité: {procedure.complexity}</span>
+                          <span>Durée: {procedure.duration}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary">{procedure.status}</Badge>
+                        <Button variant="outline" size="sm">
+                          Sélectionner
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination pour les procédures */}
+              {filteredProcedures.length > 0 && (
+                <div className="mt-6">
+                  <Pagination
+                    currentPage={proceduresCurrentPage}
+                    totalPages={proceduresTotalPages}
+                    totalItems={proceduresTotalItems}
+                    itemsPerPage={proceduresItemsPerPage}
+                    onPageChange={setProceduresCurrentPage}
+                    onItemsPerPageChange={setProceduresItemsPerPage}
+                  />
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Métriques sélectionnables avec catégories */}
           <Card>
