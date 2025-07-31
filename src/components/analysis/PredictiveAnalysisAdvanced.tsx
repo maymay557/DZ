@@ -190,7 +190,7 @@ export function PredictiveAnalysisAdvanced() {
     setItemsPerPage
   } = usePagination({
     data: predictiveTrends,
-    itemsPerPage: 4
+    itemsPerPage: 2
   });
 
   return (

@@ -158,7 +158,7 @@ export function SecuritySection({ language = "fr" }: SecuritySectionProps) {
     setItemsPerPage: setThreatsItemsPerPage
   } = usePagination({
     data: detectedThreats,
-    itemsPerPage: 10
+    itemsPerPage: 3
   });
 
   // Pagination pour les logs d'audit
@@ -172,7 +172,7 @@ export function SecuritySection({ language = "fr" }: SecuritySectionProps) {
     setItemsPerPage: setAuditLogsItemsPerPage
   } = usePagination({
     data: auditLogs,
-    itemsPerPage: 10
+    itemsPerPage: 3
   });
 
   // Pagination pour les politiques de sécurité

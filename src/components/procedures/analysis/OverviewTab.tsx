@@ -32,7 +32,7 @@ export function OverviewTab({ procedures }: OverviewTabProps) {
     setItemsPerPage
   } = usePagination({
     data: procedures,
-    itemsPerPage: 6
+    itemsPerPage: 3
   });
 
   return (

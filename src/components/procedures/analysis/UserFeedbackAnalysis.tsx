@@ -112,7 +112,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
     setItemsPerPage
   } = usePagination({
     data: comments,
-    itemsPerPage: 5
+    itemsPerPage: 3
   });
 
   return (
@@ -193,7 +193,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
             setItemsPerPage: setProcedureItemsPerPage
           } = usePagination({
             data: currentComments,
-            itemsPerPage: 5
+            itemsPerPage: 3
           });
 
           const totalRatings = currentFeedbackData ? Object.values(currentFeedbackData.ratings).reduce((acc, count) => acc + count, 0) : 0;

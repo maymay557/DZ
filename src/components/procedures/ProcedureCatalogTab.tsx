@@ -611,7 +611,7 @@ export function ProcedureCatalogTab({ onAddProcedure, onOpenApprovalQueue }: Pro
     setItemsPerPage
   } = usePagination({
     data: filteredProcedures,
-    itemsPerPage: 10
+    itemsPerPage: 4
   });
 
   // Pagination pour les institutions
@@ -625,7 +625,7 @@ export function ProcedureCatalogTab({ onAddProcedure, onOpenApprovalQueue }: Pro
     setItemsPerPage: setInstitutionsItemsPerPage
   } = usePagination({
     data: institutions,
-    itemsPerPage: 6
+    itemsPerPage: 3
   });
 
   // Pagination pour les types de procédures
@@ -639,7 +639,7 @@ export function ProcedureCatalogTab({ onAddProcedure, onOpenApprovalQueue }: Pro
     setItemsPerPage: setTypesItemsPerPage
   } = usePagination({
     data: procedureTypes,
-    itemsPerPage: 8
+    itemsPerPage: 4
   });
 
   // Pagination pour les procédures en vedette
@@ -653,7 +653,7 @@ export function ProcedureCatalogTab({ onAddProcedure, onOpenApprovalQueue }: Pro
     setItemsPerPage: setFeaturedItemsPerPage
   } = usePagination({
     data: featuredProcedures,
-    itemsPerPage: 6
+    itemsPerPage: 3
   });
 
   // Pagination pour les témoignages
@@ -667,7 +667,7 @@ export function ProcedureCatalogTab({ onAddProcedure, onOpenApprovalQueue }: Pro
     setItemsPerPage: setTestimonialsItemsPerPage
   } = usePagination({
     data: testimonials,
-    itemsPerPage: 6
+    itemsPerPage: 3
   });
 
   const getColorClasses = (color: string) => {
