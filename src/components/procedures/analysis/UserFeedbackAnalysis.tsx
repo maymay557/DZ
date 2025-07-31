@@ -102,6 +102,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
   const feedbackData = mockFeedbackData[selectedProcedure as keyof typeof mockFeedbackData];
   const comments = feedbackData?.comments || [];
   
+  // Pagination pour les commentaires généraux
   const {
     currentData: paginatedComments,
     currentPage,
