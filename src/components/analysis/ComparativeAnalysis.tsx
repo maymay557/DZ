@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { GitCompareArrows, Play, TrendingUp, TrendingDown, Calendar, Users, BarChart3, PieChart, FileText, Clock, Filter, Download } from 'lucide-react';
+import { GitCompareArrows, Play, TrendingUp, TrendingDown, Calendar, Users, BarChart3, PieChart, FileText, Clock, Filter, Download, Search } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, PieChart as RechartsPieChart, Cell, AreaChart, Area } from 'recharts';
 import { Pagination } from '@/components/common/Pagination';
 import { usePagination } from '@/hooks/usePagination';
