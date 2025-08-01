@@ -81,8 +81,194 @@ const mockFeedbackData = {
       { issue: "Communication insuffisante", count: 28, percentage: 31 },
       { issue: "Délais non respectés", count: 23, percentage: 26 }
     ]
+  },
+  '4': { // Licence Commerciale
+    ratings: { 5: 78, 4: 89, 3: 45, 2: 15, 1: 7 },
+    comments: [
+      { id: 1, rating: 4, comment: "Procédure claire et bien expliquée", category: "clarté", date: "2024-01-15" },
+      { id: 2, rating: 3, comment: "Délais respectables mais variables", category: "délais", date: "2024-01-12" },
+      { id: 3, rating: 5, comment: "Excellent service client", category: "service", date: "2024-01-10" }
+    ],
+    commonIssues: [
+      { issue: "Délais variables", count: 45, percentage: 19 },
+      { issue: "Documents manquants", count: 34, percentage: 15 },
+      { issue: "Coordination entre services", count: 28, percentage: 12 },
+      { issue: "Information insuffisante", count: 23, percentage: 10 }
+    ]
+  },
+  '5': { // Certificat de Conformité
+    ratings: { 5: 89, 4: 67, 3: 23, 2: 8, 1: 2 },
+    comments: [
+      { id: 1, rating: 5, comment: "Processus très efficace et rapide", category: "efficacité", date: "2024-01-16" },
+      { id: 2, rating: 4, comment: "Bon rapport qualité-prix", category: "coût", date: "2024-01-14" },
+      { id: 3, rating: 5, comment: "Personnel très compétent", category: "compétence", date: "2024-01-11" }
+    ],
+    commonIssues: [
+      { issue: "Coût élevé", count: 23, percentage: 12 },
+      { issue: "Délais de test", count: 18, percentage: 10 },
+      { issue: "Documentation technique", count: 15, percentage: 8 },
+      { issue: "Coordination laboratoire", count: 12, percentage: 6 }
+    ]
+  },
+  '6': { // Autorisation d'Import
+    ratings: { 5: 23, 4: 34, 3: 45, 2: 34, 1: 20 },
+    comments: [
+      { id: 1, rating: 2, comment: "Processus très complexe et long", category: "complexité", date: "2024-01-13" },
+      { id: 2, rating: 3, comment: "Contrôles très stricts", category: "contrôles", date: "2024-01-09" },
+      { id: 3, rating: 1, comment: "Délais imprévisibles", category: "délais", date: "2024-01-08" }
+    ],
+    commonIssues: [
+      { issue: "Processus complexe", count: 67, percentage: 43 },
+      { issue: "Contrôles stricts", count: 45, percentage: 29 },
+      { issue: "Délais imprévisibles", count: 34, percentage: 22 },
+      { issue: "Documentation excessive", count: 23, percentage: 15 }
+    ]
+  },
+  '7': { // Permis de Conduire
+    ratings: { 5: 234, 4: 156, 3: 89, 2: 45, 1: 43 },
+    comments: [
+      { id: 1, rating: 5, comment: "Processus simple et efficace", category: "simplicité", date: "2024-01-16" },
+      { id: 2, rating: 4, comment: "Bon rapport qualité-prix", category: "coût", date: "2024-01-14" },
+      { id: 3, rating: 5, comment: "Personnel très professionnel", category: "professionnalisme", date: "2024-01-11" }
+    ],
+    commonIssues: [
+      { issue: "Files d'attente", count: 89, percentage: 16 },
+      { issue: "Horaires limités", count: 67, percentage: 12 },
+      { issue: "Délais de livraison", count: 45, percentage: 8 },
+      { issue: "Coût des leçons", count: 34, percentage: 6 }
+    ]
+  },
+  '8': { // Carte d'Identité
+    ratings: { 5: 456, 4: 234, 3: 67, 2: 23, 1: 9 },
+    comments: [
+      { id: 1, rating: 5, comment: "Processus très rapide et simple", category: "rapidité", date: "2024-01-16" },
+      { id: 2, rating: 5, comment: "Service excellent", category: "service", date: "2024-01-14" },
+      { id: 3, rating: 4, comment: "Très satisfait du processus", category: "satisfaction", date: "2024-01-11" }
+    ],
+    commonIssues: [
+      { issue: "Files d'attente", count: 67, percentage: 9 },
+      { issue: "Horaires limités", count: 45, percentage: 6 },
+      { issue: "Délais de livraison", count: 34, percentage: 4 },
+      { issue: "Documents requis", count: 23, percentage: 3 }
+    ]
   }
 };
+
+// Données étendues des procédures pour la démonstration
+const extendedProcedures: ProcedureMetrics[] = [
+  {
+    id: '1',
+    name: 'Création SARL',
+    averageTime: 22,
+    steps: 12,
+    documents: 8,
+    administrations: 4,
+    cost: 25000,
+    complexityScore: 7.8,
+    successRate: 92,
+    userSatisfaction: 3.4,
+    feedbackCount: 156,
+    trends: { timeChange: -15, satisfactionChange: 8 }
+  },
+  {
+    id: '2',
+    name: 'Demande Passeport',
+    averageTime: 8,
+    steps: 6,
+    documents: 5,
+    administrations: 2,
+    cost: 3000,
+    complexityScore: 4.2,
+    successRate: 98,
+    userSatisfaction: 4.1,
+    feedbackCount: 432,
+    trends: { timeChange: -3, satisfactionChange: 12 }
+  },
+  {
+    id: '3',
+    name: 'Permis de Construire',
+    averageTime: 45,
+    steps: 18,
+    documents: 15,
+    administrations: 6,
+    cost: 50000,
+    complexityScore: 9.2,
+    successRate: 78,
+    userSatisfaction: 2.8,
+    feedbackCount: 89,
+    trends: { timeChange: 5, satisfactionChange: -8 }
+  },
+  {
+    id: '4',
+    name: 'Licence Commerciale',
+    averageTime: 15,
+    steps: 8,
+    documents: 6,
+    administrations: 3,
+    cost: 15000,
+    complexityScore: 5.5,
+    successRate: 85,
+    userSatisfaction: 3.2,
+    feedbackCount: 234,
+    trends: { timeChange: -8, satisfactionChange: 5 }
+  },
+  {
+    id: '5',
+    name: 'Certificat de Conformité',
+    averageTime: 12,
+    steps: 7,
+    documents: 4,
+    administrations: 2,
+    cost: 8000,
+    complexityScore: 3.8,
+    successRate: 95,
+    userSatisfaction: 4.3,
+    feedbackCount: 189,
+    trends: { timeChange: -5, satisfactionChange: 10 }
+  },
+  {
+    id: '6',
+    name: 'Autorisation d\'Import',
+    averageTime: 25,
+    steps: 14,
+    documents: 12,
+    administrations: 5,
+    cost: 35000,
+    complexityScore: 8.1,
+    successRate: 72,
+    userSatisfaction: 2.9,
+    feedbackCount: 156,
+    trends: { timeChange: 3, satisfactionChange: -5 }
+  },
+  {
+    id: '7',
+    name: 'Permis de Conduire',
+    averageTime: 10,
+    steps: 5,
+    documents: 3,
+    administrations: 2,
+    cost: 5000,
+    complexityScore: 3.2,
+    successRate: 96,
+    userSatisfaction: 4.5,
+    feedbackCount: 567,
+    trends: { timeChange: -2, satisfactionChange: 15 }
+  },
+  {
+    id: '8',
+    name: 'Carte d\'Identité',
+    averageTime: 5,
+    steps: 4,
+    documents: 2,
+    administrations: 1,
+    cost: 2000,
+    complexityScore: 2.1,
+    successRate: 99,
+    userSatisfaction: 4.7,
+    feedbackCount: 789,
+    trends: { timeChange: -1, satisfactionChange: 8 }
+  }
+];
 
 export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) {
   const [selectedProcedure, setSelectedProcedure] = useState<string>('1');
@@ -98,18 +284,32 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
     return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
   };
 
-  // Pagination pour les commentaires
-  const feedbackData = mockFeedbackData[selectedProcedure as keyof typeof mockFeedbackData];
-  const comments = feedbackData?.comments || [];
-  
+  // Pagination pour l'ensemble des procédures disponibles
   const {
-    currentData: paginatedComments,
+    currentData: paginatedProcedures,
     currentPage,
     totalPages,
     itemsPerPage,
     totalItems,
     setCurrentPage,
     setItemsPerPage
+  } = usePagination({
+    data: extendedProcedures,
+    itemsPerPage: 3
+  });
+
+  // Pagination pour les commentaires
+  const feedbackData = mockFeedbackData[selectedProcedure as keyof typeof mockFeedbackData];
+  const comments = feedbackData?.comments || [];
+  
+  const {
+    currentData: paginatedComments,
+    currentPage: commentsCurrentPage,
+    totalPages: commentsTotalPages,
+    itemsPerPage: commentsItemsPerPage,
+    totalItems: commentsTotalItems,
+    setCurrentPage: setCommentsCurrentPage,
+    setItemsPerPage: setCommentsItemsPerPage
   } = usePagination({
     data: comments,
     itemsPerPage: 5
@@ -127,7 +327,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
               </div>
               <p className="text-sm font-medium text-gray-600">Satisfaction Moyenne</p>
               <p className="text-2xl font-bold mt-2 text-green-600">
-                {procedures.reduce((acc, p) => acc + p.userSatisfaction, 0) / procedures.length.toFixed(1)}/5
+                {extendedProcedures.reduce((acc, p) => acc + p.userSatisfaction, 0) / extendedProcedures.length.toFixed(1)}/5
               </p>
             </div>
           </CardContent>
@@ -141,7 +341,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
               </div>
               <p className="text-sm font-medium text-gray-600">Total Feedback</p>
               <p className="text-2xl font-bold mt-2 text-blue-600">
-                {procedures.reduce((acc, p) => acc + p.feedbackCount, 0)}
+                {extendedProcedures.reduce((acc, p) => acc + p.feedbackCount, 0)}
               </p>
             </div>
           </CardContent>
@@ -155,7 +355,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
               </div>
               <p className="text-sm font-medium text-gray-600">Utilisateurs Actifs</p>
               <p className="text-2xl font-bold mt-2 text-purple-600">
-                {Math.round(procedures.reduce((acc, p) => acc + p.feedbackCount, 0) * 0.8)}
+                {Math.round(extendedProcedures.reduce((acc, p) => acc + p.feedbackCount, 0) * 0.8)}
               </p>
             </div>
           </CardContent>
@@ -169,16 +369,16 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
               </div>
               <p className="text-sm font-medium text-gray-600">Temps Moyen</p>
               <p className="text-2xl font-bold mt-2 text-orange-600">
-                {Math.round(procedures.reduce((acc, p) => acc + p.averageTime, 0) / procedures.length)}j
+                {Math.round(extendedProcedures.reduce((acc, p) => acc + p.averageTime, 0) / extendedProcedures.length)}j
               </p>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Analyse détaillée par procédure */}
+      {/* Analyse détaillée par procédure avec pagination */}
       <div className="space-y-6">
-        {procedures.map((procedure) => {
+        {paginatedProcedures.map((procedure) => {
           const currentFeedbackData = mockFeedbackData[procedure.id as keyof typeof mockFeedbackData];
           const currentComments = currentFeedbackData?.comments || [];
           
@@ -328,6 +528,20 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
           );
         })}
       </div>
+
+      {/* Pagination pour l'ensemble des procédures */}
+      {totalPages > 1 && (
+        <div className="mt-6">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+          />
+        </div>
+      )}
     </div>
   );
 }
