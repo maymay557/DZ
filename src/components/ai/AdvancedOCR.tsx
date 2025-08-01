@@ -19,7 +19,6 @@ import {
   Edit, 
   Share2, 
   Play,
-  FilePdf,
   FileImage,
   Copy,
   Users,
