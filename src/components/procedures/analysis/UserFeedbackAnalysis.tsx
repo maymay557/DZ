@@ -444,18 +444,14 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
           const currentComments = currentFeedbackData?.comments || [];
           
           // Pagination pour les commentaires de cette procédure
-          const {
-            currentData: paginatedProcedureComments,
-            currentPage: procedureCurrentPage,
-            totalPages: procedureTotalPages,
-            itemsPerPage: procedureItemsPerPage,
-            totalItems: procedureTotalItems,
-            setCurrentPage: setProcedureCurrentPage,
-            setItemsPerPage: setProcedureItemsPerPage
-          } = usePagination({
-            data: currentComments,
-            itemsPerPage: 5
-          });
+          // Pagination manuelle pour les commentaires de cette procédure
+          const startIndex = 0;
+          const endIndex = 5;
+          const paginatedProcedureComments = currentComments.slice(startIndex, endIndex);
+          const procedureTotalPages = Math.ceil(currentComments.length / 5);
+          const procedureCurrentPage = 1;
+          const procedureItemsPerPage = 5;
+          const procedureTotalItems = currentComments.length;
 
           const totalRatings = currentFeedbackData ? Object.values(currentFeedbackData.ratings).reduce((acc, count) => acc + count, 0) : 0;
 

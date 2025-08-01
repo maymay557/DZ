@@ -384,27 +384,22 @@ export function UserGuideSection() {
 
   // Pagination pour les articles de chaque catégorie
   const getPaginatedArticles = (articles: any[], itemsPerPage: number = 3) => {
-    const {
-      currentData: paginatedArticles,
-      currentPage,
-      totalPages,
-      itemsPerPage: paginationItemsPerPage,
-      totalItems,
-      setCurrentPage,
-      setItemsPerPage
-    } = usePagination({
-      data: articles,
-      itemsPerPage
-    });
+    // Pagination manuelle
+    const currentPage = 1;
+    const totalItems = articles.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedArticles = articles.slice(startIndex, endIndex);
 
     return {
       paginatedArticles,
       currentPage,
       totalPages,
-      itemsPerPage: paginationItemsPerPage,
+      itemsPerPage,
       totalItems,
-      setCurrentPage,
-      setItemsPerPage
+      setCurrentPage: () => {},
+      setItemsPerPage: () => {}
     };
   };
 
