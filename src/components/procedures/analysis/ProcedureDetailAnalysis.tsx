@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SmartAutocomplete } from '@/components/common/SmartAutocomplete';
+import { Pagination } from '@/components/common/Pagination';
+import { usePagination } from '@/hooks/usePagination';
 import { 
   Clock, 
   FileText, 
@@ -99,8 +101,24 @@ export function ProcedureDetailAnalysis({ procedures }: ProcedureDetailAnalysisP
     const matchesSearch = procedure.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterType === 'all' || 
       (filterType === 'simple' && procedure.complexityScore <= 5) ||
-      (filterType === 'complex' && procedure.complexityScore > 5);
+      (filterType === 'moderate' && procedure.complexityScore > 5 && procedure.complexityScore <= 7) ||
+      (filterType === 'complex' && procedure.complexityScore > 7);
+    
     return matchesSearch && matchesFilter;
+  });
+
+  // Pagination pour les procédures disponibles
+  const {
+    currentData: paginatedProcedures,
+    currentPage,
+    totalPages,
+    itemsPerPage,
+    totalItems,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredProcedures,
+    itemsPerPage: 5
   });
 
   const getSuggestions = () => [
@@ -157,8 +175,27 @@ export function ProcedureDetailAnalysis({ procedures }: ProcedureDetailAnalysisP
             <CardTitle>Procédures Disponibles ({filteredProcedures.length})</CardTitle>
           </CardHeader>
           <CardContent>
+            {/* Filtres */}
+            <div className="mb-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <Filter className="w-4 h-4 text-gray-500" />
+                <span className="text-sm font-medium text-gray-700">Filtrer par complexité :</span>
+              </div>
+              <Select value={filterType} onValueChange={setFilterType}>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes les procédures</SelectItem>
+                  <SelectItem value="simple">Procédures simples (≤5)</SelectItem>
+                  <SelectItem value="moderate">Procédures modérées (6-7)</SelectItem>
+                  <SelectItem value="complex">Procédures complexes (&gt;7)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="space-y-3">
-              {filteredProcedures.map((procedure) => {
+              {paginatedProcedures.map((procedure) => {
                 const complexity = getComplexityLevel(procedure.complexityScore);
                 return (
                   <div 
@@ -197,6 +234,21 @@ export function ProcedureDetailAnalysis({ procedures }: ProcedureDetailAnalysisP
                 );
               })}
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-6">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  itemsPerPage={itemsPerPage}
+                  onPageChange={setCurrentPage}
+                  onItemsPerPageChange={setItemsPerPage}
+                  itemsPerPageOptions={[3, 5, 10, 15]}
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
 

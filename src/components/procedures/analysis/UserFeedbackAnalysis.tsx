@@ -2,6 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Pagination } from '@/components/common/Pagination';
 import { usePagination } from '@/hooks/usePagination';
 import { useState } from 'react';
@@ -13,7 +14,8 @@ import {
   TrendingUp,
   Users,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Filter
 } from 'lucide-react';
 
 interface ProcedureMetrics {
@@ -86,6 +88,30 @@ const mockFeedbackData = {
 
 export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) {
   const [selectedProcedure, setSelectedProcedure] = useState<string>('1');
+  const [filterType, setFilterType] = useState<string>('all');
+
+  const filteredProcedures = procedures.filter(procedure => {
+    const matchesFilter = filterType === 'all' || 
+      (filterType === 'simple' && procedure.complexityScore <= 5) ||
+      (filterType === 'moderate' && procedure.complexityScore > 5 && procedure.complexityScore <= 7) ||
+      (filterType === 'complex' && procedure.complexityScore > 7);
+    
+    return matchesFilter;
+  });
+
+  // Pagination pour l'ensemble des procédures disponibles
+  const {
+    currentData: paginatedProcedures,
+    currentPage,
+    totalPages,
+    itemsPerPage,
+    totalItems,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredProcedures,
+    itemsPerPage: 3
+  });
 
   const getSatisfactionColor = (rating: number) => {
     if (rating >= 4) return 'text-green-600';
@@ -104,12 +130,12 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
   
   const {
     currentData: paginatedComments,
-    currentPage,
-    totalPages,
-    itemsPerPage,
-    totalItems,
-    setCurrentPage,
-    setItemsPerPage
+    currentPage: currentPageComments,
+    totalPages: totalPagesComments,
+    itemsPerPage: itemsPerPageComments,
+    totalItems: totalItemsComments,
+    setCurrentPage: setCurrentPageComments,
+    setItemsPerPage: setItemsPerPageComments
   } = usePagination({
     data: comments,
     itemsPerPage: 5
@@ -178,7 +204,45 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
 
       {/* Analyse détaillée par procédure */}
       <div className="space-y-6">
-        {procedures.map((procedure) => {
+        {/* Filtres pour les procédures */}
+        <Card>
+          <CardContent className="pt-6">
+            <div className="mb-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <Filter className="w-4 h-4 text-gray-500" />
+                <span className="text-sm font-medium text-gray-700">Filtrer les procédures par complexité :</span>
+              </div>
+              <Select value={filterType} onValueChange={setFilterType}>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes les procédures</SelectItem>
+                  <SelectItem value="simple">Procédures simples (≤5)</SelectItem>
+                  <SelectItem value="moderate">Procédures modérées (6-7)</SelectItem>
+                  <SelectItem value="complex">Procédures complexes (&gt;7)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Pagination pour les procédures */}
+            {totalPages > 1 && (
+              <div className="mb-4">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  itemsPerPage={itemsPerPage}
+                  onPageChange={setCurrentPage}
+                  onItemsPerPageChange={setItemsPerPage}
+                  itemsPerPageOptions={[2, 3, 5, 10]}
+                />
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {paginatedProcedures.map((procedure) => {
           const currentFeedbackData = mockFeedbackData[procedure.id as keyof typeof mockFeedbackData];
           const currentComments = currentFeedbackData?.comments || [];
           
