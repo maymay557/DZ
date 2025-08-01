@@ -237,11 +237,25 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [satisfactionFilter, setSatisfactionFilter] = useState<string>('all');
+  
+  // États de pagination pour les commentaires de chaque procédure
+  const [procedurePagination, setProcedurePagination] = useState<Record<string, { currentPage: number; itemsPerPage: number }>>({});
 
   const resetFilters = () => {
     setSearchTerm('');
     setCategoryFilter('all');
     setSatisfactionFilter('all');
+  };
+
+  const getProcedurePagination = (procedureId: string) => {
+    return procedurePagination[procedureId] || { currentPage: 1, itemsPerPage: 5 };
+  };
+
+  const updateProcedurePagination = (procedureId: string, updates: Partial<{ currentPage: number; itemsPerPage: number }>) => {
+    setProcedurePagination(prev => ({
+      ...prev,
+      [procedureId]: { ...getProcedurePagination(procedureId), ...updates }
+    }));
   };
 
   const categories = [...new Set(extendedProcedures.map(p => p.category))];
@@ -443,15 +457,12 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
           const currentFeedbackData = mockFeedbackData[procedure.id as keyof typeof mockFeedbackData];
           const currentComments = currentFeedbackData?.comments || [];
           
-          // Pagination pour les commentaires de cette procédure
-          // Pagination manuelle pour les commentaires de cette procédure
-          const [procedureCurrentPage, setProcedureCurrentPage] = useState(1);
-          const [procedureItemsPerPage, setProcedureItemsPerPage] = useState(5);
-          
-          const startIndex = (procedureCurrentPage - 1) * procedureItemsPerPage;
-          const endIndex = startIndex + procedureItemsPerPage;
+          // Utilisation de la pagination centralisée
+          const pagination = getProcedurePagination(procedure.id.toString());
+          const startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
+          const endIndex = startIndex + pagination.itemsPerPage;
           const paginatedProcedureComments = currentComments.slice(startIndex, endIndex);
-          const procedureTotalPages = Math.ceil(currentComments.length / procedureItemsPerPage);
+          const procedureTotalPages = Math.ceil(currentComments.length / pagination.itemsPerPage);
           const procedureTotalItems = currentComments.length;
 
           const totalRatings = currentFeedbackData ? Object.values(currentFeedbackData.ratings).reduce((acc, count) => acc + count, 0) : 0;
@@ -571,12 +582,12 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
                   {procedureTotalPages > 1 && (
                     <div className="mt-6">
                       <Pagination
-                        currentPage={procedureCurrentPage}
+                        currentPage={pagination.currentPage}
                         totalPages={procedureTotalPages}
                         totalItems={procedureTotalItems}
-                        itemsPerPage={procedureItemsPerPage}
-                        onPageChange={setProcedureCurrentPage}
-                        onItemsPerPageChange={setProcedureItemsPerPage}
+                        itemsPerPage={pagination.itemsPerPage}
+                        onPageChange={(page) => updateProcedurePagination(procedure.id.toString(), { currentPage: page })}
+                        onItemsPerPageChange={(itemsPerPage) => updateProcedurePagination(procedure.id.toString(), { itemsPerPage, currentPage: 1 })}
                       />
                     </div>
                   )}
