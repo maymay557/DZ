@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Pagination } from '@/components/common/Pagination';
+import { usePagination } from '@/hooks/usePagination';
 import { 
   Clock, 
   FileText, 
@@ -12,7 +15,8 @@ import {
   Target,
   Users,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  Filter
 } from 'lucide-react';
 
 interface ProcedureMetrics {
@@ -44,6 +48,31 @@ export function ProcedureComparisonTable({
   selectedProcedures, 
   onSelectionChange 
 }: ProcedureComparisonTableProps) {
+  const [filterType, setFilterType] = useState<string>('all');
+
+  const filteredProcedures = procedures.filter(procedure => {
+    const matchesFilter = filterType === 'all' || 
+      (filterType === 'simple' && procedure.complexityScore <= 5) ||
+      (filterType === 'moderate' && procedure.complexityScore > 5 && procedure.complexityScore <= 7) ||
+      (filterType === 'complex' && procedure.complexityScore > 7);
+    
+    return matchesFilter;
+  });
+
+  // Pagination pour les procédures disponibles
+  const {
+    currentData: paginatedProcedures,
+    currentPage,
+    totalPages,
+    itemsPerPage,
+    totalItems,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredProcedures,
+    itemsPerPage: 6
+  });
+
   const handleProcedureToggle = (procedureId: string) => {
     const isSelected = selectedProcedures.includes(procedureId);
     if (isSelected) {
@@ -70,8 +99,27 @@ export function ProcedureComparisonTable({
           <CardTitle>Sélectionner les Procédures à Comparer (max 3)</CardTitle>
         </CardHeader>
         <CardContent>
+          {/* Filtres */}
+          <div className="mb-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <Filter className="w-4 h-4 text-gray-500" />
+              <span className="text-sm font-medium text-gray-700">Filtrer par complexité :</span>
+            </div>
+            <Select value={filterType} onValueChange={setFilterType}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Toutes les procédures</SelectItem>
+                <SelectItem value="simple">Procédures simples (≤5)</SelectItem>
+                <SelectItem value="moderate">Procédures modérées (6-7)</SelectItem>
+                <SelectItem value="complex">Procédures complexes (&gt;7)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="space-y-3">
-            {procedures.map((procedure) => (
+            {paginatedProcedures.map((procedure) => (
               <div key={procedure.id} className="flex items-center space-x-3 p-3 border rounded-lg">
                 <Checkbox
                   checked={selectedProcedures.includes(procedure.id)}
@@ -90,6 +138,21 @@ export function ProcedureComparisonTable({
               </div>
             ))}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-6">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalItems={totalItems}
+                itemsPerPage={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onItemsPerPageChange={setItemsPerPage}
+                itemsPerPageOptions={[3, 6, 9, 12]}
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
 
