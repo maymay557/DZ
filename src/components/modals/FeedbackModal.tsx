@@ -62,14 +62,14 @@ export function FeedbackModal({ isOpen, onClose, type, itemTitle }: FeedbackModa
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md bg-background border border-border">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             {config.icon}
             {config.title}
           </DialogTitle>
           {itemTitle && (
-            <p className="text-sm text-gray-600">Concernant: {itemTitle}</p>
+            <p className="text-sm text-muted-foreground">Concernant: {itemTitle}</p>
           )}
         </DialogHeader>
         
@@ -82,7 +82,7 @@ export function FeedbackModal({ isOpen, onClose, type, itemTitle }: FeedbackModa
                   <button
                     key={star}
                     onClick={() => handleStarClick(star)}
-                    className={`text-2xl ${star <= formData.rating ? 'text-yellow-400' : 'text-gray-300'} hover:text-yellow-400`}
+                    className={`text-2xl ${star <= formData.rating ? 'text-yellow-500' : 'text-muted-foreground/50'} hover:text-yellow-500 transition-colors`}
                   >
                     ★
                   </button>
