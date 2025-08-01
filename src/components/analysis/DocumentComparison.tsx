@@ -35,6 +35,7 @@ import {
   TrendingUp,
   BarChart3
 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface Document {
   id: string;
@@ -64,6 +65,7 @@ export function DocumentComparison() {
   const [selectedDocuments, setSelectedDocuments] = useState<Document[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'legal' | 'procedure'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [comparisonResults, setComparisonResults] = useState<ComparisonResult | null>(null);
   const [isComparing, setIsComparing] = useState(false);
 
@@ -265,8 +267,9 @@ export function DocumentComparison() {
                          doc.category.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesType = filterType === 'all' || doc.type === filterType;
+    const matchesCategory = categoryFilter === 'all' || doc.category === categoryFilter;
     
-    return matchesSearch && matchesType && !selectedDocuments.find(selected => selected.id === doc.id);
+    return matchesSearch && matchesType && matchesCategory && !selectedDocuments.find(selected => selected.id === doc.id);
   });
 
   // Pagination pour les documents disponibles
@@ -293,6 +296,12 @@ export function DocumentComparison() {
 
   const removeDocument = (documentId: string) => {
     setSelectedDocuments(selectedDocuments.filter(doc => doc.id !== documentId));
+  };
+
+  const resetFilters = () => {
+    setSearchTerm('');
+    setFilterType('all');
+    setCategoryFilter('all');
   };
 
   const startComparison = async () => {
@@ -377,12 +386,24 @@ export function DocumentComparison() {
           <CardContent className="space-y-4">
             {/* Filtres et recherche */}
             <div className="space-y-3">
-              <Input
-                placeholder="Rechercher un document..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full"
-              />
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <Input
+                    placeholder="Rechercher un document..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={resetFilters}
+                  className="flex items-center gap-2"
+                >
+                  <X className="w-4 h-4" />
+                  Réinitialiser
+                </Button>
+              </div>
               
               <div className="flex flex-wrap gap-2">
                 <Button
@@ -406,6 +427,27 @@ export function DocumentComparison() {
                 >
                   Procédures administratives
                 </Button>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-gray-700">Catégorie :</span>
+                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                  <SelectTrigger className="w-48">
+                    <Building className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Toutes les catégories" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Toutes les catégories</SelectItem>
+                    {categories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <span className="text-sm text-gray-600">
+                  {totalItems} document{totalItems > 1 ? 's' : ''} trouvé{totalItems > 1 ? 's' : ''}
+                </span>
               </div>
             </div>
 

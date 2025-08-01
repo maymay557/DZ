@@ -6,6 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { SmartAutocomplete } from '@/components/common/SmartAutocomplete';
 import { Pagination } from '@/components/common/Pagination';
 import { usePagination } from '@/hooks/usePagination';
+import { Input } from '@/components/ui/input';
+import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
 import { 
   Clock, 
   FileText, 
@@ -23,7 +26,9 @@ import {
   Filter,
   Star,
   MessageSquare,
-  Brain
+  Brain,
+  X,
+  RotateCcw
 } from 'lucide-react';
 import { ProcedureMetrics } from './types';
 import { getComplexityLevel } from './utils';
@@ -50,7 +55,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     risks: ['Délais d\'instruction variables', 'Exigences documentaires strictes', 'Contrôle fiscal potentiel'],
     recommendations: ['Préparer tous les documents avant le dépôt', 'Consulter un expert-comptable', 'Prévoir un délai supplémentaire'],
     simplificationRecommendations: ['Dématérialiser complètement le dépôt de capital', 'Créer un guichet unique pour toutes les formalités', 'Automatiser la vérification des documents'],
-    aiInsights: ['Taux de réussite en amélioration (+8%)', 'Délais raccourcis grâce à la dématérialisation', 'Documents manquants = cause principale de rejet']
+    aiInsights: ['Taux de réussite en amélioration (+8%)', 'Délais raccourcis grâce à la dématérialisation', 'Documents manquants = cause principale de rejet'],
+    category: 'Entreprise'
   },
   {
     id: '2',
@@ -69,7 +75,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     risks: ['Délais d\'attente pour RDV', 'Photos non conformes', 'Documents périmés'],
     recommendations: ['Vérifier la validité des documents', 'Respecter les normes photos', 'Prendre RDV à l\'avance'],
     simplificationRecommendations: ['Augmenter les créneaux de rendez-vous', 'Permettre la prise de photo sur place', 'Intégrer la vérification automatique des documents'],
-    aiInsights: ['Satisfaction en hausse grâce au service en ligne', 'Photos conformes = 95% de réussite', 'RDV en ligne réduit l\'attente de 60%']
+    aiInsights: ['Satisfaction en hausse grâce au service en ligne', 'Photos conformes = 95% de réussite', 'RDV en ligne réduit l\'attente de 60%'],
+    category: 'État Civil'
   },
   {
     id: '3',
@@ -88,7 +95,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     risks: ['Non-conformité au POS', 'Études techniques insuffisantes', 'Recours des tiers'],
     recommendations: ['Consulter le POS en amont', 'Faire appel à un architecte', 'Prévoir une étude géotechnique'],
     simplificationRecommendations: ['Créer une plateforme unique pour toutes les validations', 'Réduire le nombre d\'étapes de 18 à 10', 'Automatiser les vérifications de conformité de base'],
-    aiInsights: ['Complexité croissante due aux nouvelles normes', 'Recours fréquents = principal facteur de délai', 'Dossiers complets = 85% d\'acceptation']
+    aiInsights: ['Complexité croissante due aux nouvelles normes', 'Recours fréquents = principal facteur de délai', 'Dossiers complets = 85% d\'acceptation'],
+    category: 'Urbanisme'
   },
   {
     id: '4',
@@ -107,7 +115,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     risks: ['Zone non autorisée', 'Documents incomplets', 'Délais variables'],
     recommendations: ['Vérifier la zone d\'implantation', 'Préparer tous les documents', 'Contacter l\'administration'],
     simplificationRecommendations: ['Créer un guichet unique', 'Simplifier les documents requis', 'Automatiser les vérifications'],
-    aiInsights: ['Taux de réussite stable', 'Délais en amélioration', 'Documents complets = succès']
+    aiInsights: ['Taux de réussite stable', 'Délais en amélioration', 'Documents complets = succès'],
+    category: 'Commerce'
   },
   {
     id: '5',
@@ -126,7 +135,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     risks: ['Tests non conformes', 'Délais de laboratoire', 'Coûts variables'],
     recommendations: ['Préparer les échantillons', 'Vérifier les normes', 'Prévoir les coûts'],
     simplificationRecommendations: ['Accélérer les tests', 'Réduire les coûts', 'Améliorer la communication'],
-    aiInsights: ['Satisfaction élevée', 'Délais optimisés', 'Qualité constante']
+    aiInsights: ['Satisfaction élevée', 'Délais optimisés', 'Qualité constante'],
+    category: 'Industrie'
   },
   {
     id: '6',
@@ -145,7 +155,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     risks: ['Documents manquants', 'Contrôles stricts', 'Délais imprévisibles'],
     recommendations: ['Préparer tous les documents', 'Anticiper les contrôles', 'Prévoir des délais'],
     simplificationRecommendations: ['Dématérialiser les procédures', 'Harmoniser les contrôles', 'Améliorer la transparence'],
-    aiInsights: ['Complexité croissante', 'Contrôles renforcés', 'Délais variables']
+    aiInsights: ['Complexité croissante', 'Contrôles renforcés', 'Délais variables'],
+    category: 'Commerce International'
   }
 ];
 
@@ -153,13 +164,49 @@ export function ProcedureDetailAnalysis({ procedures }: ProcedureDetailAnalysisP
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProcedure, setSelectedProcedure] = useState<ProcedureMetrics | null>(null);
   const [filterType, setFilterType] = useState<string>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [satisfactionRange, setSatisfactionRange] = useState<number[]>([1, 5]);
+  const [complexityRange, setComplexityRange] = useState<number[]>([0, 10]);
+  const [timeRange, setTimeRange] = useState<number[]>([0, 50]);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
+  const resetFilters = () => {
+    setFilterType('all');
+    setCategoryFilter('all');
+    setSatisfactionRange([1, 5]);
+    setComplexityRange([0, 10]);
+    setTimeRange([0, 50]);
+    setSearchTerm('');
+  };
+
+  const categories = [...new Set(extendedProcedures.map(p => p.category))];
 
   const filteredProcedures = extendedProcedures.filter(procedure => {
-    const matchesSearch = procedure.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterType === 'all' || 
+    const matchesSearch = procedure.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         procedure.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         procedure.category?.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesType = filterType === 'all' || 
       (filterType === 'simple' && procedure.complexityScore <= 5) ||
-      (filterType === 'complex' && procedure.complexityScore > 5);
-    return matchesSearch && matchesFilter;
+      (filterType === 'complex' && procedure.complexityScore > 5) ||
+      (filterType === 'fast' && procedure.averageTime <= 15) ||
+      (filterType === 'slow' && procedure.averageTime > 15) ||
+      (filterType === 'high-satisfaction' && procedure.userSatisfaction >= 4) ||
+      (filterType === 'low-satisfaction' && procedure.userSatisfaction < 3);
+
+    const matchesCategory = categoryFilter === 'all' || procedure.category === categoryFilter;
+    
+    const matchesSatisfaction = procedure.userSatisfaction >= satisfactionRange[0] && 
+                               procedure.userSatisfaction <= satisfactionRange[1];
+    
+    const matchesComplexity = procedure.complexityScore >= complexityRange[0] && 
+                             procedure.complexityScore <= complexityRange[1];
+    
+    const matchesTime = procedure.averageTime >= timeRange[0] && 
+                       procedure.averageTime <= timeRange[1];
+
+    return matchesSearch && matchesType && matchesCategory && 
+           matchesSatisfaction && matchesComplexity && matchesTime;
   });
 
   // Pagination pour les procédures filtrées
@@ -186,12 +233,12 @@ export function ProcedureDetailAnalysis({ procedures }: ProcedureDetailAnalysisP
 
   return (
     <div className="space-y-6">
-      {/* Barre de recherche et filtres */}
+      {/* Barre de recherche et filtres améliorés */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Search className="w-5 h-5" />
-            Rechercher une Procédure
+            Rechercher et Filtrer les Procédures
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -206,19 +253,129 @@ export function ProcedureDetailAnalysis({ procedures }: ProcedureDetailAnalysisP
                 enableVoice={true}
               />
             </div>
+            <Button
+              variant="outline"
+              onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+              className="flex items-center gap-2"
+            >
+              <Filter className="w-4 h-4" />
+              Filtres avancés
+            </Button>
+            <Button
+              variant="outline"
+              onClick={resetFilters}
+              className="flex items-center gap-2"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Réinitialiser
+            </Button>
+          </div>
+
+          {/* Filtres de base */}
+          <div className="flex gap-4 flex-wrap">
             <div className="w-48">
               <Select value={filterType} onValueChange={setFilterType}>
                 <SelectTrigger>
                   <Filter className="w-4 h-4 mr-2" />
-                  <SelectValue placeholder="Filtrer" />
+                  <SelectValue placeholder="Type" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Toutes les procédures</SelectItem>
                   <SelectItem value="simple">Procédures simples</SelectItem>
                   <SelectItem value="complex">Procédures complexes</SelectItem>
+                  <SelectItem value="fast">Procédures rapides (≤15j)</SelectItem>
+                  <SelectItem value="slow">Procédures longues (>15j)</SelectItem>
+                  <SelectItem value="high-satisfaction">Haute satisfaction (≥4)</SelectItem>
+                  <SelectItem value="low-satisfaction">Satisfaction faible (<3)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="w-48">
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger>
+                  <Building2 className="w-4 h-4 mr-2" />
+                  <SelectValue placeholder="Catégorie" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes les catégories</SelectItem>
+                  {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Filtres avancés */}
+          {showAdvancedFilters && (
+            <div className="border-t pt-4 mt-4 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Filtre de satisfaction */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium flex items-center gap-2">
+                    <Star className="w-4 h-4" />
+                    Satisfaction utilisateur: {satisfactionRange[0]} - {satisfactionRange[1]}/5
+                  </Label>
+                  <Slider
+                    value={satisfactionRange}
+                    onValueChange={setSatisfactionRange}
+                    max={5}
+                    min={1}
+                    step={0.1}
+                    className="w-full"
+                  />
+                </div>
+
+                {/* Filtre de complexité */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium flex items-center gap-2">
+                    <Target className="w-4 h-4" />
+                    Complexité: {complexityRange[0]} - {complexityRange[1]}/10
+                  </Label>
+                  <Slider
+                    value={complexityRange}
+                    onValueChange={setComplexityRange}
+                    max={10}
+                    min={0}
+                    step={0.1}
+                    className="w-full"
+                  />
+                </div>
+
+                {/* Filtre de délais */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    Délais: {timeRange[0]} - {timeRange[1]} jours
+                  </Label>
+                  <Slider
+                    value={timeRange}
+                    onValueChange={setTimeRange}
+                    max={50}
+                    min={0}
+                    step={1}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Indicateur de résultats */}
+          <div className="flex items-center justify-between text-sm text-gray-600">
+            <span>{totalItems} procédure{totalItems > 1 ? 's' : ''} trouvée{totalItems > 1 ? 's' : ''}</span>
+            {(searchTerm || filterType !== 'all' || categoryFilter !== 'all' || 
+              satisfactionRange[0] !== 1 || satisfactionRange[1] !== 5 ||
+              complexityRange[0] !== 0 || complexityRange[1] !== 10 ||
+              timeRange[0] !== 0 || timeRange[1] !== 50) && (
+              <Button variant="ghost" size="sm" onClick={resetFilters} className="text-blue-600">
+                <X className="w-3 h-3 mr-1" />
+                Effacer les filtres
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>

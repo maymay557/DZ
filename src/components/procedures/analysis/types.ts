@@ -20,6 +20,7 @@ export interface ProcedureMetrics {
   recommendations?: string[];
   simplificationRecommendations?: string[];
   aiInsights?: string[];
+  category?: string;
 }
 
 export interface ComparisonCriteria {

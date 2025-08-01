@@ -5,6 +5,9 @@ import { Progress } from '@/components/ui/progress';
 import { Pagination } from '@/components/common/Pagination';
 import { usePagination } from '@/hooks/usePagination';
 import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 import { 
   MessageCircle, 
   ThumbsUp, 
@@ -13,7 +16,12 @@ import {
   TrendingUp,
   Users,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Search,
+  Filter,
+  Building2,
+  X,
+  RotateCcw
 } from 'lucide-react';
 
 interface ProcedureMetrics {
@@ -32,6 +40,7 @@ interface ProcedureMetrics {
     timeChange: number;
     satisfactionChange: number;
   };
+  category?: string;
 }
 
 interface UserFeedbackAnalysisProps {
@@ -113,7 +122,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     successRate: 92,
     userSatisfaction: 3.4,
     feedbackCount: 156,
-    trends: { timeChange: -15, satisfactionChange: 8 }
+    trends: { timeChange: -15, satisfactionChange: 8 },
+    category: 'Entreprise'
   },
   {
     id: '2',
@@ -127,7 +137,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     successRate: 98,
     userSatisfaction: 4.1,
     feedbackCount: 432,
-    trends: { timeChange: -3, satisfactionChange: 12 }
+    trends: { timeChange: -3, satisfactionChange: 12 },
+    category: 'État Civil'
   },
   {
     id: '3',
@@ -141,7 +152,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     successRate: 78,
     userSatisfaction: 2.8,
     feedbackCount: 89,
-    trends: { timeChange: 5, satisfactionChange: -8 }
+    trends: { timeChange: 5, satisfactionChange: -8 },
+    category: 'Urbanisme'
   },
   {
     id: '4',
@@ -155,7 +167,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     successRate: 85,
     userSatisfaction: 3.2,
     feedbackCount: 234,
-    trends: { timeChange: -8, satisfactionChange: 5 }
+    trends: { timeChange: -8, satisfactionChange: 5 },
+    category: 'Commerce'
   },
   {
     id: '5',
@@ -169,7 +182,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     successRate: 95,
     userSatisfaction: 4.3,
     feedbackCount: 189,
-    trends: { timeChange: -5, satisfactionChange: 10 }
+    trends: { timeChange: -5, satisfactionChange: 10 },
+    category: 'Industrie'
   },
   {
     id: '6',
@@ -183,7 +197,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     successRate: 72,
     userSatisfaction: 2.9,
     feedbackCount: 156,
-    trends: { timeChange: 3, satisfactionChange: -5 }
+    trends: { timeChange: 3, satisfactionChange: -5 },
+    category: 'Commerce International'
   },
   {
     id: '7',
@@ -197,7 +212,8 @@ const extendedProcedures: ProcedureMetrics[] = [
     successRate: 96,
     userSatisfaction: 4.5,
     feedbackCount: 567,
-    trends: { timeChange: -2, satisfactionChange: 15 }
+    trends: { timeChange: -2, satisfactionChange: 15 },
+    category: 'Transport'
   },
   {
     id: '8',
@@ -211,12 +227,39 @@ const extendedProcedures: ProcedureMetrics[] = [
     successRate: 99,
     userSatisfaction: 4.7,
     feedbackCount: 789,
-    trends: { timeChange: -1, satisfactionChange: 8 }
+    trends: { timeChange: -1, satisfactionChange: 8 },
+    category: 'État Civil'
   }
 ];
 
 export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) {
   const [selectedProcedure, setSelectedProcedure] = useState<string>('1');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [satisfactionFilter, setSatisfactionFilter] = useState<string>('all');
+
+  const resetFilters = () => {
+    setSearchTerm('');
+    setCategoryFilter('all');
+    setSatisfactionFilter('all');
+  };
+
+  const categories = [...new Set(extendedProcedures.map(p => p.category))];
+
+  // Filtrage des procédures
+  const filteredProcedures = extendedProcedures.filter(procedure => {
+    const matchesSearch = procedure.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         procedure.category?.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesCategory = categoryFilter === 'all' || procedure.category === categoryFilter;
+    
+    const matchesSatisfaction = satisfactionFilter === 'all' ||
+      (satisfactionFilter === 'high' && procedure.userSatisfaction >= 4) ||
+      (satisfactionFilter === 'medium' && procedure.userSatisfaction >= 3 && procedure.userSatisfaction < 4) ||
+      (satisfactionFilter === 'low' && procedure.userSatisfaction < 3);
+
+    return matchesSearch && matchesCategory && matchesSatisfaction;
+  });
 
   const getSatisfactionColor = (rating: number) => {
     if (rating >= 4) return 'text-green-600';
@@ -229,7 +272,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
     return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
   };
 
-  // Pagination pour l'ensemble des procédures disponibles
+  // Pagination pour l'ensemble des procédures disponibles avec filtres
   const {
     currentData: paginatedProcedures,
     currentPage,
@@ -239,7 +282,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
     setCurrentPage,
     setItemsPerPage
   } = usePagination({
-    data: extendedProcedures,
+    data: filteredProcedures,
     itemsPerPage: 3
   });
 
@@ -272,7 +315,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
               </div>
               <p className="text-sm font-medium text-gray-600">Satisfaction Moyenne</p>
               <p className="text-2xl font-bold mt-2 text-green-600">
-                {extendedProcedures.reduce((acc, p) => acc + p.userSatisfaction, 0) / extendedProcedures.length.toFixed(1)}/5
+                {(filteredProcedures.reduce((acc, p) => acc + p.userSatisfaction, 0) / filteredProcedures.length).toFixed(1)}/5
               </p>
             </div>
           </CardContent>
@@ -286,7 +329,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
               </div>
               <p className="text-sm font-medium text-gray-600">Total Feedback</p>
               <p className="text-2xl font-bold mt-2 text-blue-600">
-                {extendedProcedures.reduce((acc, p) => acc + p.feedbackCount, 0)}
+                {filteredProcedures.reduce((acc, p) => acc + p.feedbackCount, 0)}
               </p>
             </div>
           </CardContent>
@@ -300,7 +343,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
               </div>
               <p className="text-sm font-medium text-gray-600">Utilisateurs Actifs</p>
               <p className="text-2xl font-bold mt-2 text-purple-600">
-                {Math.round(extendedProcedures.reduce((acc, p) => acc + p.feedbackCount, 0) * 0.8)}
+                {Math.round(filteredProcedures.reduce((acc, p) => acc + p.feedbackCount, 0) * 0.8)}
               </p>
             </div>
           </CardContent>
@@ -314,12 +357,85 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
               </div>
               <p className="text-sm font-medium text-gray-600">Temps Moyen</p>
               <p className="text-2xl font-bold mt-2 text-orange-600">
-                {Math.round(extendedProcedures.reduce((acc, p) => acc + p.averageTime, 0) / extendedProcedures.length)}j
+                {Math.round(filteredProcedures.reduce((acc, p) => acc + p.averageTime, 0) / filteredProcedures.length)}j
               </p>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Filtres pour les procédures */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="w-5 h-5" />
+            Filtrer les Procédures
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-4 flex-wrap">
+            <div className="flex-1 min-w-[300px]">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  placeholder="Rechercher une procédure..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            
+            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <SelectTrigger className="w-48">
+                <Building2 className="w-4 h-4 mr-2" />
+                <SelectValue placeholder="Catégorie" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Toutes les catégories</SelectItem>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={satisfactionFilter} onValueChange={setSatisfactionFilter}>
+              <SelectTrigger className="w-48">
+                <Star className="w-4 h-4 mr-2" />
+                <SelectValue placeholder="Satisfaction" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Toutes satisfactions</SelectItem>
+                <SelectItem value="high">Haute (≥4/5)</SelectItem>
+                <SelectItem value="medium">Moyenne (3-4/5)</SelectItem>
+                <SelectItem value="low">Faible (<3/5)</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button
+              variant="outline"
+              onClick={resetFilters}
+              className="flex items-center gap-2"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Réinitialiser
+            </Button>
+          </div>
+
+          {/* Indicateur de résultats */}
+          <div className="flex items-center justify-between text-sm text-gray-600">
+            <span>{totalItems} procédure{totalItems > 1 ? 's' : ''} trouvée{totalItems > 1 ? 's' : ''}</span>
+            {(searchTerm || categoryFilter !== 'all' || satisfactionFilter !== 'all') && (
+              <Button variant="ghost" size="sm" onClick={resetFilters} className="text-blue-600">
+                <X className="w-3 h-3 mr-1" />
+                Effacer les filtres
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Analyse détaillée par procédure avec pagination */}
       <div className="space-y-6">
