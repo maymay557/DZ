@@ -312,9 +312,9 @@ export function ProcedureComparisonTable({
                 <SelectItem value="simple">Procédures simples</SelectItem>
                 <SelectItem value="complex">Procédures complexes</SelectItem>
                 <SelectItem value="fast">Procédures rapides (≤10j)</SelectItem>
-                <SelectItem value="slow">Procédures longues (>10j)</SelectItem>
+                <SelectItem value="slow">Procédures longues (&gt;10j)</SelectItem>
                 <SelectItem value="high-satisfaction">Haute satisfaction (≥4)</SelectItem>
-                <SelectItem value="low-satisfaction">Satisfaction faible (<3)</SelectItem>
+                <SelectItem value="low-satisfaction">Satisfaction faible (&lt;3)</SelectItem>
               </SelectContent>
             </Select>
             

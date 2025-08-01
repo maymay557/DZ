@@ -284,9 +284,9 @@ export function ProcedureDetailAnalysis({ procedures }: ProcedureDetailAnalysisP
                   <SelectItem value="simple">Procédures simples</SelectItem>
                   <SelectItem value="complex">Procédures complexes</SelectItem>
                   <SelectItem value="fast">Procédures rapides (≤15j)</SelectItem>
-                  <SelectItem value="slow">Procédures longues (>15j)</SelectItem>
-                  <SelectItem value="high-satisfaction">Haute satisfaction (≥4)</SelectItem>
-                  <SelectItem value="low-satisfaction">Satisfaction faible (<3)</SelectItem>
+                                  <SelectItem value="slow">Procédures longues (&gt;15j)</SelectItem>
+                <SelectItem value="high-satisfaction">Haute satisfaction (≥4)</SelectItem>
+                <SelectItem value="low-satisfaction">Satisfaction faible (&lt;3)</SelectItem>
                 </SelectContent>
               </Select>
             </div>

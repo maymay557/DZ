@@ -410,7 +410,7 @@ export function UserFeedbackAnalysis({ procedures }: UserFeedbackAnalysisProps) 
                 <SelectItem value="all">Toutes satisfactions</SelectItem>
                 <SelectItem value="high">Haute (≥4/5)</SelectItem>
                 <SelectItem value="medium">Moyenne (3-4/5)</SelectItem>
-                <SelectItem value="low">Faible (<3/5)</SelectItem>
+                <SelectItem value="low">Faible (&lt;3/5)</SelectItem>
               </SelectContent>
             </Select>
 
