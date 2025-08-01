@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SmartAutocomplete } from '@/components/common/SmartAutocomplete';
+import { Pagination } from '@/components/common/Pagination';
+import { usePagination } from '@/hooks/usePagination';
 import { 
   Clock, 
   FileText, 
@@ -87,6 +89,63 @@ const extendedProcedures: ProcedureMetrics[] = [
     recommendations: ['Consulter le POS en amont', 'Faire appel à un architecte', 'Prévoir une étude géotechnique'],
     simplificationRecommendations: ['Créer une plateforme unique pour toutes les validations', 'Réduire le nombre d\'étapes de 18 à 10', 'Automatiser les vérifications de conformité de base'],
     aiInsights: ['Complexité croissante due aux nouvelles normes', 'Recours fréquents = principal facteur de délai', 'Dossiers complets = 85% d\'acceptation']
+  },
+  {
+    id: '4',
+    name: 'Licence Commerciale',
+    averageTime: 15,
+    steps: 8,
+    documents: 6,
+    administrations: 3,
+    cost: 15000,
+    complexityScore: 5.5,
+    successRate: 85,
+    userSatisfaction: 3.2,
+    feedbackCount: 234,
+    trends: { timeChange: -8, satisfactionChange: 5 },
+    description: 'Autorisation d\'exercer une activité commerciale avec vérification des conditions d\'installation.',
+    risks: ['Zone non autorisée', 'Documents incomplets', 'Délais variables'],
+    recommendations: ['Vérifier la zone d\'implantation', 'Préparer tous les documents', 'Contacter l\'administration'],
+    simplificationRecommendations: ['Créer un guichet unique', 'Simplifier les documents requis', 'Automatiser les vérifications'],
+    aiInsights: ['Taux de réussite stable', 'Délais en amélioration', 'Documents complets = succès']
+  },
+  {
+    id: '5',
+    name: 'Certificat de Conformité',
+    averageTime: 12,
+    steps: 7,
+    documents: 4,
+    administrations: 2,
+    cost: 8000,
+    complexityScore: 3.8,
+    successRate: 95,
+    userSatisfaction: 4.3,
+    feedbackCount: 189,
+    trends: { timeChange: -5, satisfactionChange: 10 },
+    description: 'Certification de conformité pour les produits industriels et commerciaux.',
+    risks: ['Tests non conformes', 'Délais de laboratoire', 'Coûts variables'],
+    recommendations: ['Préparer les échantillons', 'Vérifier les normes', 'Prévoir les coûts'],
+    simplificationRecommendations: ['Accélérer les tests', 'Réduire les coûts', 'Améliorer la communication'],
+    aiInsights: ['Satisfaction élevée', 'Délais optimisés', 'Qualité constante']
+  },
+  {
+    id: '6',
+    name: 'Autorisation d\'Import',
+    averageTime: 25,
+    steps: 14,
+    documents: 12,
+    administrations: 5,
+    cost: 35000,
+    complexityScore: 8.1,
+    successRate: 72,
+    userSatisfaction: 2.9,
+    feedbackCount: 156,
+    trends: { timeChange: 3, satisfactionChange: -5 },
+    description: 'Autorisation d\'importer des marchandises avec contrôle douanier et fiscal.',
+    risks: ['Documents manquants', 'Contrôles stricts', 'Délais imprévisibles'],
+    recommendations: ['Préparer tous les documents', 'Anticiper les contrôles', 'Prévoir des délais'],
+    simplificationRecommendations: ['Dématérialiser les procédures', 'Harmoniser les contrôles', 'Améliorer la transparence'],
+    aiInsights: ['Complexité croissante', 'Contrôles renforcés', 'Délais variables']
   }
 ];
 
@@ -101,6 +160,20 @@ export function ProcedureDetailAnalysis({ procedures }: ProcedureDetailAnalysisP
       (filterType === 'simple' && procedure.complexityScore <= 5) ||
       (filterType === 'complex' && procedure.complexityScore > 5);
     return matchesSearch && matchesFilter;
+  });
+
+  // Pagination pour les procédures filtrées
+  const {
+    currentData: paginatedProcedures,
+    currentPage,
+    totalPages,
+    itemsPerPage,
+    totalItems,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredProcedures,
+    itemsPerPage: 5
   });
 
   const getSuggestions = () => [
@@ -151,14 +224,14 @@ export function ProcedureDetailAnalysis({ procedures }: ProcedureDetailAnalysisP
       </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Liste des procédures */}
+        {/* Liste des procédures avec pagination */}
         <Card>
           <CardHeader>
-            <CardTitle>Procédures Disponibles ({filteredProcedures.length})</CardTitle>
+            <CardTitle>Procédures Disponibles ({totalItems})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {filteredProcedures.map((procedure) => {
+              {paginatedProcedures.map((procedure) => {
                 const complexity = getComplexityLevel(procedure.complexityScore);
                 return (
                   <div 
@@ -197,6 +270,20 @@ export function ProcedureDetailAnalysis({ procedures }: ProcedureDetailAnalysisP
                 );
               })}
             </div>
+            
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-6">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  itemsPerPage={itemsPerPage}
+                  onPageChange={setCurrentPage}
+                  onItemsPerPageChange={setItemsPerPage}
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
 
