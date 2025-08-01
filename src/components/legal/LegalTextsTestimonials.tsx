@@ -104,7 +104,7 @@ export function LegalTextsTestimonials() {
     setItemsPerPage
   } = usePagination({
     data: filteredTestimonials,
-    itemsPerPage: 4
+    itemsPerPage: 5
   });
 
   const renderStars = (rating: number) => {

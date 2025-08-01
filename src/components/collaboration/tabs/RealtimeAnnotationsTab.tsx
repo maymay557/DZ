@@ -50,7 +50,7 @@ export function RealtimeAnnotationsTab() {
     setItemsPerPage
   } = usePagination({
     data: realtimeAnnotations,
-    itemsPerPage: 6
+    itemsPerPage: 5
   });
 
   const handleSaveAnnotation = (annotationData: Record<string, unknown>) => {

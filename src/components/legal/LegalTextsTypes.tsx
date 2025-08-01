@@ -117,7 +117,7 @@ export function LegalTextsTypes() {
     setItemsPerPage
   } = usePagination({
     data: textTypes,
-    itemsPerPage: 10
+    itemsPerPage: 5
   });
 
   const getColorClasses = (color: string) => {

@@ -120,7 +120,7 @@ export function LegalTextsInstitutions() {
     setItemsPerPage
   } = usePagination({
     data: institutions,
-    itemsPerPage: 10
+    itemsPerPage: 5
   });
 
   return (

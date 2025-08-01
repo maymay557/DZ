@@ -22,7 +22,7 @@ interface UsePaginationReturn<T> {
 
 export function usePagination<T>({
   data,
-  itemsPerPage: initialItemsPerPage = 10
+  itemsPerPage: initialItemsPerPage = 5
 }: UsePaginationProps<T>): UsePaginationReturn<T> {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
